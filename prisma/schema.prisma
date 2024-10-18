@@ -32,6 +32,7 @@ model Student {
   grade       Grade        @relation(fields: [gradeId], references: [id])
   attendances Attendance[]
   results     Result[]
+  birthday    DateTime
 }
 
 model Teacher {
@@ -49,6 +50,7 @@ model Teacher {
   subjects  Subject[]
   lessons   Lesson[]
   classes   Class[]
+  birthday  DateTime
 }
 
 model Parent {
@@ -64,9 +66,8 @@ model Parent {
 }
 
 model Grade {
-  id    Int    @id @default(autoincrement())
-  name  Int    @unique
-  level String @unique
+  id    Int @id @default(autoincrement())
+  level Int @unique
 
   students Student[]
   classes  Class[]
@@ -77,10 +78,10 @@ model Class {
   name     String @unique
   capacity Int
 
-  supervisorId  String
-  supervisor    Teacher        @relation(fields: [supervisorId], references: [id])
+  supervisorId  String?
+  supervisor    Teacher?       @relation(fields: [supervisorId], references: [id])
   lessons       Lesson[]
-  student       Student[]
+  students      Student[]
   gradeId       Int
   grade         Grade          @relation(fields: [gradeId], references: [id])
   events        Event[]
