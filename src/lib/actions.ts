@@ -14,6 +14,9 @@ export const createSubject = async (
     await prisma.subject.create({
       data: {
         name: data.name,
+        teachers: {
+          connect: data.teachers.map((teacherId) => ({ id: teacherId })),
+        },
       },
     });
 
@@ -36,6 +39,9 @@ export const updateSubject = async (
       },
       data: {
         name: data.name,
+        teachers: {
+          set: data.teachers.map((teacherId) => ({ id: teacherId })),
+        },
       },
     });
 
@@ -49,12 +55,13 @@ export const updateSubject = async (
 
 export const deleteSubject = async (
   currentState: CurrentState,
-  data: SubjectSchema
+  data: FormData
 ) => {
+  const id = data.get("id") as string;
   try {
     await prisma.subject.delete({
       where: {
-        id: data.id,
+        id: parseInt(id),
       },
     });
 
