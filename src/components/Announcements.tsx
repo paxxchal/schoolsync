@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import Image from "next/image";
 
 const Announcements = async () => {
   const { userId, sessionClaims } = auth();
@@ -36,7 +35,7 @@ const Announcements = async () => {
           <div className="bg-caesarSkyLight rounded-md p-4">
             <div className="flex items-center justify-between">
               <h2 className="font-medium">{data[0].title}</h2>
-              <span className="text-sm text-gray-400 bg-white rounded-md px-1 py-1">
+              <span className="text-xs text-gray-400 bg-white rounded-md px-1 py-1">
                 {new Intl.DateTimeFormat("en-GB").format(data[0].date)}
               </span>
             </div>
@@ -47,7 +46,7 @@ const Announcements = async () => {
           <div className="bg-caesarBlueLight rounded-md p-4">
             <div className="flex items-center justify-between">
               <h2 className="font-medium">{data[1].title}</h2>
-              <span className="text-sm text-gray-400 bg-white rounded-md px-1 py-1">
+              <span className="text-xs text-gray-400 bg-white rounded-md px-1 py-1">
                 {new Intl.DateTimeFormat("en-GB").format(data[1].date)}
               </span>
             </div>
@@ -58,7 +57,7 @@ const Announcements = async () => {
           <div className="bg-caesarPinkLight rounded-md p-4">
             <div className="flex items-center justify-between">
               <h2 className="font-medium">{data[2].title}</h2>
-              <span className="text-sm text-gray-400 bg-white rounded-md px-1 py-1">
+              <span className="text-xs text-gray-400 bg-white rounded-md px-1 py-1">
                 {new Intl.DateTimeFormat("en-GB").format(data[2].date)}
               </span>
             </div>

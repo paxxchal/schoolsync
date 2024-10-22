@@ -1,6 +1,12 @@
 "use client";
 
-import { deleteSubject } from "@/lib/actions";
+import {
+  deleteClass,
+  deleteExam,
+  deleteStudent,
+  deleteSubject,
+  deleteTeacher,
+} from "@/lib/actions";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -9,7 +15,26 @@ import { useFormState } from "react-dom";
 import { toast } from "react-toastify";
 import { FormContainerProps } from "./FormContainer";
 
+const deleteActionMap = {
+  subject: deleteSubject,
+  class: deleteClass,
+  teacher: deleteTeacher,
+  student: deleteStudent,
+  exam: deleteExam,
+  // TODO: OTHER DELETE ACTIONS
+  parent: deleteSubject,
+  lesson: deleteSubject,
+  assignment: deleteSubject,
+  result: deleteSubject,
+  attendance: deleteSubject,
+  event: deleteSubject,
+  announcement: deleteSubject,
+};
+
 // USE LAZY LOADING
+
+// import TeacherForm from "./forms/TeacherForm";
+// import StudentForm from "./forms/StudentForm";
 
 const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
   loading: () => <h1>Loading...</h1>,
@@ -20,30 +45,13 @@ const StudentForm = dynamic(() => import("./forms/StudentForm"), {
 const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const ParentForm = dynamic(() => import("./forms/ParentForm"));
-const ClassForm = dynamic(() => import("./forms/ClassForm"));
-const LessonForm = dynamic(() => import("./forms/LessonForm"));
-const ExamForm = dynamic(() => import("./forms/ExamForm"));
-const AssignmentForm = dynamic(() => import("./forms/AssignmentForm"));
-const ResultForm = dynamic(() => import("./forms/ResultForm"));
-const AttendanceForm = dynamic(() => import("./forms/AttendanceForm"));
-const EventForm = dynamic(() => import("./forms/EventForm"));
-const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"));
-
-const deleteActionMap = {
-  subject: deleteSubject,
-  class: deleteSubject,
-  teacher: deleteSubject,
-  student: deleteSubject,
-  parent: deleteSubject,
-  lesson: deleteSubject,
-  exam: deleteSubject,
-  assignment: deleteSubject,
-  result: deleteSubject,
-  attendance: deleteSubject,
-  event: deleteSubject,
-  announcement: deleteSubject,
-};
+const ClassForm = dynamic(() => import("./forms/ClassForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const ExamForm = dynamic(() => import("./forms/ExamForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+// TODO: OTHER FORMS
 
 const forms: {
   [key: string]: (
@@ -61,31 +69,7 @@ const forms: {
       relatedData={relatedData}
     />
   ),
-  teacher: (type, data, setOpen) => (
-    <TeacherForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
-  ),
-  student: (type, data, setOpen) => (
-    <StudentForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
-  ),
-  parent: (type, data, setOpen) => (
-    <ParentForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
-  ),
-  class: (type, data, setOpen) => (
+  class: (setOpen, type, data, relatedData) => (
     <ClassForm
       type={type}
       data={data}
@@ -93,61 +77,30 @@ const forms: {
       relatedData={relatedData}
     />
   ),
-  lesson: (type, data, setOpen) => (
-    <LessonForm
+  teacher: (setOpen, type, data, relatedData) => (
+    <TeacherForm
       type={type}
       data={data}
       setOpen={setOpen}
       relatedData={relatedData}
     />
   ),
-  exam: (type, data, setOpen) => (
+  student: (setOpen, type, data, relatedData) => (
+    <StudentForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  exam: (setOpen, type, data, relatedData) => (
     <ExamForm
       type={type}
       data={data}
       setOpen={setOpen}
       relatedData={relatedData}
     />
-  ),
-  assignment: (type, data, setOpen) => (
-    <AssignmentForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
-  ),
-  result: (type, data, setOpen) => (
-    <ResultForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
-  ),
-  attendance: (type, data, setOpen) => (
-    <AttendanceForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
-  ),
-  event: (type, data, setOpen) => (
-    <EventForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
-  ),
-  announcement: (type, data, setOpen) => (
-    <AnnouncementForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    // TODO OTHER LIST ITEMS
   ),
 };
 
@@ -163,8 +116,8 @@ const FormModal = ({
     type === "create"
       ? "bg-caesarPink"
       : type === "update"
-      ? "bg-caesarSkyLight"
-      : "bg-caesarBlueLight";
+      ? "bg-CaesarSkyLight"
+      : "bg-CaesarBlueLight";
 
   const [open, setOpen] = useState(false);
 
@@ -178,11 +131,11 @@ const FormModal = ({
 
     useEffect(() => {
       if (state.success) {
-        toast(`Subject has been deleted!`);
+        toast(`${table} has been deleted!`);
         setOpen(false);
         router.refresh();
       }
-    }, [state]);
+    }, [state, router]);
 
     return type === "delete" && id ? (
       <form action={formAction} className="p-4 flex flex-col gap-4">
@@ -197,7 +150,7 @@ const FormModal = ({
     ) : type === "create" || type === "update" ? (
       forms[table](setOpen, type, data, relatedData)
     ) : (
-      "Form not found"
+      "Form not found!"
     );
   };
 

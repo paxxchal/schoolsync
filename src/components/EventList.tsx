@@ -11,6 +11,7 @@ const EventList = async ({ dateParam }: { dateParam: string | undefined }) => {
       },
     },
   });
+
   return data.map((event) => (
     <div
       className="p-5 rounded-md border-2 border-gray-100 border-t-4 odd:border-t-caesarSkyLight even:border-t-caesarBlueLight"

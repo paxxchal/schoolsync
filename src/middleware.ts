@@ -1,6 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { routerAccessMap } from "./lib/settings";
 import { NextResponse } from "next/server";
+import { routerAccessMap } from "./lib/settings";
 
 const matchers = Object.keys(routerAccessMap).map((route) => ({
   matcher: createRouteMatcher([route]),
@@ -10,7 +10,7 @@ const matchers = Object.keys(routerAccessMap).map((route) => ({
 console.log(matchers);
 
 export default clerkMiddleware((auth, req) => {
-  //   if (isProtectedRoute(req)) auth().protect()
+  // if (isProtectedRoute(req)) auth().protect()
 
   const { sessionClaims } = auth();
 

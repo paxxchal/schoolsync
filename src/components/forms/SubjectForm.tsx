@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
-import { error } from "console";
 import { subjectSchema, SubjectSchema } from "@/lib/formValidationSchemas";
 import { createSubject, updateSubject } from "@/lib/actions";
 import { useFormState } from "react-dom";
@@ -43,7 +42,6 @@ const SubjectForm = ({
   const onSubmit = handleSubmit((data) => {
     console.log(data);
     formAction(data);
-    // TODO: submit data to the server
   });
 
   const router = useRouter();
@@ -54,15 +52,16 @@ const SubjectForm = ({
       setOpen(false);
       router.refresh();
     }
-  }, [state]);
+  }, [state, router, type, setOpen]);
 
   const { teachers } = relatedData;
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
-        {type === "create" ? "create a new subject" : "Update Subject"}
+        {type === "create" ? "Create a new subject" : "Update the subject"}
       </h1>
+
       <div className="flex justify-between flex-wrap gap-4">
         <InputField
           label="Subject name"
@@ -96,8 +95,6 @@ const SubjectForm = ({
                 </option>
               )
             )}
-            <option value="male">Male</option>
-            <option value="female">Female</option>
           </select>
           {errors.teachers?.message && (
             <p className="text-xs text-red-400">
