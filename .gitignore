@@ -6,5 +6,6 @@ out/
 
 #local files
 .env
+.env*.local
 
 .vscode/
